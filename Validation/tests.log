@@ -1,0 +1,35 @@
+Start testing: Nov 03 14:59 Paris, Madrid
+----------------------------------------------------------
+1/2 Testing: SpaceAudio
+1/2 Test: SpaceAudio
+Command: "C:/Users/EBOUA-02504/Desktop/Data/swell-space-time/build/SpaceTest_artefacts/Release/SpaceTest.exe"
+Directory: C:/Users/EBOUA-02504/Desktop/Data/swell-space-time/build
+"SpaceAudio" start time: Nov 03 14:59 Paris, Madrid
+Output:
+----------------------------------------------------------
+PASS: 20 presets at 3 rates, tails, finite output, oversized blocks, dry transparency, bypass, state, Focus reduction
+<end of output>
+Test time =   0.92 sec
+----------------------------------------------------------
+Test Passed.
+"SpaceAudio" end time: Nov 03 14:59 Paris, Madrid
+"SpaceAudio" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/2 Testing: PingPong
+2/2 Test: PingPong
+Command: "C:/Users/EBOUA-02504/Desktop/Data/swell-space-time/build/PingTest_artefacts/Release/PingTest.exe"
+Directory: C:/Users/EBOUA-02504/Desktop/Data/swell-space-time/build
+"PingPong" start time: Nov 03 14:59 Paris, Madrid
+Output:
+----------------------------------------------------------
+PASS: L/R/L repeats, centered width 0, untouched direct, 3 rates, saved state, preset reset, legacy state
+<end of output>
+Test time =   0.22 sec
+----------------------------------------------------------
+Test Passed.
+"PingPong" end time: Nov 03 14:59 Paris, Madrid
+"PingPong" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 03 14:59 Paris, Madrid

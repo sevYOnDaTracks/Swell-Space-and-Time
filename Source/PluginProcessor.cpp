@@ -1,3 +1,4 @@
+#include "ResizableEditor.h"
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 SpaceProcessor::SpaceProcessor():AudioProcessor(BusesProperties().withInput("Input",juce::AudioChannelSet::stereo(),true).withOutput("Output",juce::AudioChannelSet::stereo(),true)),state(*this,nullptr,"SwellSpaceTime",layout()) {for(int i=0;i<parameterCount;++i)parameters[i]=state.getRawParameterValue(ids[i]);}
@@ -55,7 +56,7 @@ void SpaceProcessor::render(juce::AudioBuffer<float>& b,bool forced){
  for(int c=channels;c<b.getNumChannels();++c)b.clear(c,0,b.getNumSamples());
  auto publish=[](std::atomic<float>& a,float x){float prior=a.load();while(prior<x&&!a.compare_exchange_weak(prior,x)){};};publish(inputPeak,ip);publish(outputPeak,op);duckDb=maximumDuck;
 }
-juce::AudioProcessorEditor* SpaceProcessor::createEditor(){return new SpaceEditor(*this);}juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter(){return new SpaceProcessor();}
+juce::AudioProcessorEditor* SpaceProcessor::createEditor(){return new ResizableEditor(*this, new SpaceEditor(*this));}juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter(){return new SpaceProcessor();}
 
 double SpaceProcessor::getTailLengthSeconds() const {
  const double beats[]={4,2,1,.5,.25},feel[]={1,1.5,2./3.};

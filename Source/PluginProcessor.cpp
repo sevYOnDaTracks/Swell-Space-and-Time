@@ -22,7 +22,7 @@ void SpaceProcessor::prepareToPlay(double sr,int){sampleRate=sr;for(auto& v:dela
 void SpaceProcessor::setCurrentProgram(int i){i=juce::jlimit(0,19,i);program=i;auto* ping=state.getParameter("pingpong");ping->beginChangeGesture();ping->setValueNotifyingHost(0);ping->endChangeGesture();for(int k=0;k<parameterCount;++k){auto* p=state.getParameter(ids[k]);p->beginChangeGesture();p->setValueNotifyingHost(p->convertTo0to1(presets[i].values[k]));p->endChangeGesture();}}
 void SpaceProcessor::getStateInformation(juce::MemoryBlock& b){auto t=state.copyState();t.setProperty("preset",program.load(),nullptr);auto xml=t.createXml();copyXmlToBinary(*xml,b);}
 void SpaceProcessor::setStateInformation(const void* data,int size){auto xml=getXmlFromBinary(data,size);if(xml&&xml->hasTagName(state.state.getType())){auto t=juce::ValueTree::fromXml(*xml);program=juce::jlimit(0,19,(int)t.getProperty("preset",0));bool hasPing=false;for(auto child:t)if(child.getProperty("id").toString()=="pingpong")hasPing=true;if(!hasPing){juce::ValueTree child("PARAM");child.setProperty("id","pingpong",nullptr);child.setProperty("value",0.f,nullptr);t.addChild(child,-1,nullptr);}state.replaceState(t);}}
-void SpaceProcessor::processBlock(juce::AudioBuffer<float>& b,juce::MidiBuffer&){render(b,false);}
+void SpaceProcessor::processBlock(juce::AudioBuffer<float>& b,juce::MidiBuffer&){ if (! licence->isUnlocked()) { b.clear(); return; } render(b,false);}
 void SpaceProcessor::processBlockBypassed(juce::AudioBuffer<float>& b,juce::MidiBuffer&){render(b,true);}
 void SpaceProcessor::render(juce::AudioBuffer<float>& b,bool forced){
  juce::ScopedNoDenormals guard;if(delayLine[0].empty())return;
@@ -56,7 +56,7 @@ void SpaceProcessor::render(juce::AudioBuffer<float>& b,bool forced){
  for(int c=channels;c<b.getNumChannels();++c)b.clear(c,0,b.getNumSamples());
  auto publish=[](std::atomic<float>& a,float x){float prior=a.load();while(prior<x&&!a.compare_exchange_weak(prior,x)){};};publish(inputPeak,ip);publish(outputPeak,op);duckDb=maximumDuck;
 }
-juce::AudioProcessorEditor* SpaceProcessor::createEditor(){return new ResizableEditor(*this, new SpaceEditor(*this));}juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter(){return new SpaceProcessor();}
+juce::AudioProcessorEditor* SpaceProcessor::createEditor(){return swell::LicenceGuard::attach (new ResizableEditor(*this, new SpaceEditor(*this)));}juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter(){return new SpaceProcessor();}
 
 double SpaceProcessor::getTailLengthSeconds() const {
  const double beats[]={4,2,1,.5,.25},feel[]={1,1.5,2./3.};
